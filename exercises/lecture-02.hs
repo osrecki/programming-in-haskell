@@ -1,7 +1,7 @@
 {-|
 Module      : Lecture2Exercises
 Description : Solutions to in-class exercises for Lecture 2
-Maintainer  : dinko.osrecki@gmail.com
+Maintainer  : Dinko Osrecki
 -}
 module Lecture2Exercises where
 
