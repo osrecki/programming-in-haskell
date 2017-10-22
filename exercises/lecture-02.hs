@@ -77,3 +77,17 @@ shiftChar n c = shiftChar (n - 1) (next c)
 --   thereby ignoring the whitespaces and all words shorter than three letters.
 letterCount :: String -> Int
 letterCount xs = sum [length ys | ys <- words xs, length ys > 2]
+
+-- | 3.2
+--   Redefine 'isPalindrome' so that it's case insensitive and works correctly
+--   for strings that contain whitespaces.
+isPalindrome :: String -> Bool
+isPalindrome xs = s == reverse s
+  where
+    s = (map toLower . filter (/= ' ')) xs
+
+-- | 3.3
+--   Define a function that takes a list of lists, reverts each individual
+--   list, and concatenates all of them, but in the reverse order.
+reverseConcat :: [[a]] -> [a]
+reverseConcat = concat . reverse . map reverse
