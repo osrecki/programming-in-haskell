@@ -89,3 +89,22 @@ isPalindrome xs = s == reverse s
 --   list, and concatenates all of them, but in the reverse order.
 reverseConcat :: [[a]] -> [a]
 reverseConcat = concat . reverse . map reverse
+
+-- | 4.1
+--   Define a function that returns the coordinates of all points within
+--   the ([-10..10],[-10..10]) interval that fall inside a circle of radius
+--   'r' with center '(x,y)'.
+type Point a = (a, a)
+type Circle a = (Point a, a)
+
+inCircleXs :: (Floating a, Ord a, Enum a) => Circle a -> [Point a]
+inCircleXs c = filter (inCircle c) [(a, b) | a <- [-10..10], b <- [-10..10]]
+
+inCircle :: (Floating a, Ord a) => Circle a -> Point a -> Bool
+inCircle (o, r) p = distance o p <= r
+
+distance :: (Floating a) => Point a -> Point a -> a
+distance (x1, y1) (x2, y2) = sqrt (dx * dx + dy * dy)
+  where
+    dx = x1 - x2
+    dy = y1 - y2
