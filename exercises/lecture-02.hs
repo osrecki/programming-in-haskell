@@ -18,10 +18,8 @@ noFirst3NoLast3 xs = zipWith (curry fst) (drop 3 xs) (drop 6 xs)
 --   Define a function that takes a person's name and a surname and returns
 --   a string consisting of person's initials.
 initials :: String -> String -> String
-initials name surname = [n, '.', ' ', s, '.']
-  where
-    (n:_) = name
-    (s:_) = surname
+initials (n:_) (s:_) = [n, '.', ' ', s, '.']
+initials _ _         = error "Invalid parameters."
 
 -- | 1.3
 --   Define a function that concatenates two strings, so that the longest
