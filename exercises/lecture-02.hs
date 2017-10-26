@@ -116,3 +116,10 @@ distance (x1, y1) (x2, y2) = sqrt (dx * dx + dy * dy)
   where
     dx = x1 - x2
     dy = y1 - y2
+
+-- | 4.2
+--   Define a function that, given a list xs = [x1,x2,...], generates the
+--   pairs [(x1,x2),(x2,x3),...].
+steps :: [a] -> [(a, a)]
+steps [] = []
+steps xs = zip xs $ tail xs
