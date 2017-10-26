@@ -1,5 +1,5 @@
 {-|
-Module      : Homework1
+Module      : Homework1Tasks
 Description : Solutions to homework 1 tasks
 Maintainer  : Dinko Osrecki
 -}
