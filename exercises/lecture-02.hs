@@ -131,3 +131,12 @@ indices :: (Eq a) => a -> [a] -> [Int]
 indices x xs = [i | (i, y) <- ys, y == x]
   where
     ys = zip [0..] xs
+
+-- | 5.2
+--   Define a function that prefixes all lines from string 's' with a
+--   line number.
+showLineNumbers :: String -> String
+showLineNumbers = unlines . zipWith prepend numbers . lines
+  where
+    prepend i x = show i ++ " " ++ x
+    numbers     = [1..]
