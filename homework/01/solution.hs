@@ -5,6 +5,9 @@ Maintainer  : Dinko Osrecki
 -}
 module Homework1Tasks where
 
+import           Data.Char
+import           Data.Set  (Set, fromList, member, toList, union)
+
 -- | 1.1
 --   Write a function that checks if a year is a leap year.
 isLeapYear :: Int -> Bool
@@ -95,3 +98,35 @@ update [] _ _ = []
 update (x:xs) k v
   | fst x == k = (k, v):xs
   | otherwise  = x : update xs k v
+
+-- | 4.
+--   Implement a function that calculates a cosine similarity between
+--   two texts.
+bag :: String -> Set String
+bag = fromList . words . map toLower . filter valid
+  where
+    valid c = isLetter c || isSpace c
+
+space :: Set String -> Set String -> [String]
+space xs ys = toList $ union xs ys
+
+vector :: Set String -> [String] -> [Int]
+vector b = map (boolToInt . (`member` b))
+  where
+    boolToInt x = if x then 1 else 0
+
+dotProduct :: [Int] -> [Int] -> Double
+dotProduct xs ys = fromIntegral $ sum $ zipWith (*) xs ys
+
+magnitude :: [Int] -> Double
+magnitude = sqrt . sum . map ((** 2) . fromIntegral)
+
+similarity :: [Int] -> [Int] -> Double
+similarity xs ys = dotProduct xs ys / (magnitude xs * magnitude ys)
+
+cosineSimilarity :: String -> String -> Double
+cosineSimilarity a b = similarity (vector m s) (vector n s)
+  where
+    s = space m n
+    m = bag a
+    n = bag b
