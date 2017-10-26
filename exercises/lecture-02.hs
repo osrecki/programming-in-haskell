@@ -90,15 +90,23 @@ isPalindrome xs = s == reverse s
 reverseConcat :: [[a]] -> [a]
 reverseConcat = concat . reverse . map reverse
 
--- | 4.1
+-- | 4.1.1
 --   Define a function that returns the coordinates of all points within
 --   the ([-10..10],[-10..10]) interval that fall inside a circle of radius
 --   'r' with center '(x,y)'.
+inCircleXs :: (Floating a, Ord a, Enum a) => Circle a -> [Point a]
+inCircleXs c = [(a, b) | a <- [-10..10], b <- [-10..10], inCircle c (a, b)]
+
+-- | 4.1.2
+--   Redefine the function so that it takes the resolution of the grid as
+--   an additional argument.
+inCircleXs' :: (Floating a, Ord a, Enum a) => Circle a -> a -> [Point a]
+inCircleXs' c s = [(a, b) | a <- ds, b <- ds, inCircle c (a, b)]
+  where
+    ds = map (* s) [-10/s..10/s]
+
 type Point a = (a, a)
 type Circle a = (Point a, a)
-
-inCircleXs :: (Floating a, Ord a, Enum a) => Circle a -> [Point a]
-inCircleXs c = filter (inCircle c) [(a, b) | a <- [-10..10], b <- [-10..10]]
 
 inCircle :: (Floating a, Ord a) => Circle a -> Point a -> Bool
 inCircle (o, r) p = distance o p <= r
