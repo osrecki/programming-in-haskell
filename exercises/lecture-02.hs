@@ -140,3 +140,23 @@ showLineNumbers = unlines . zipWith prepend numbers . lines
   where
     prepend i x = show i ++ " " ++ x
     numbers     = [1..]
+
+-- | 5.3.1
+--   Define a function that returns 'True' if 'xs' and 'ys' have any
+--   identical elements that are aligned (appear at the same position
+--   in both lists).
+haveAlignment :: (Eq a) => [a] -> [a] -> Bool
+haveAlignment _ [] = False
+haveAlignment [] _ = False
+haveAlignment (x:xs) (y:ys)
+  | x == y    = True
+  | otherwise = haveAlignment xs ys
+
+-- | 5.3.2
+--   Define a function that returns the aligned subsequences.
+common :: (Eq a) => [a] -> [a] -> [a]
+common _ [] = []
+common [] _ = []
+common (x:xs) (y:ys)
+  | x == y    = x : common xs ys
+  | otherwise = common xs ys
