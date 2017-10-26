@@ -123,3 +123,11 @@ distance (x1, y1) (x2, y2) = sqrt (dx * dx + dy * dy)
 steps :: [a] -> [(a, a)]
 steps [] = []
 steps xs = zip xs $ tail xs
+
+-- | 5.1
+--   Define a function that returns the indices of element 'x' in list 'xs'
+--   (if 'x' appears multiple times, there will be a number of such indices).
+indices :: (Eq a) => a -> [a] -> [Int]
+indices x xs = [i | (i, y) <- ys, y == x]
+  where
+    ys = zip [0..] xs
