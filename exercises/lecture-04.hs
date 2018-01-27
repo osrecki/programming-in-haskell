@@ -62,6 +62,8 @@ quartiles xs = (f 0.25, f 0.5, f 0.75)
   where
     f q = quantile q xs
 
+-- | Implements estimate type R-6.
+--   <https://en.wikipedia.org/wiki/Quantile>
 quantile :: Double -> [Double] -> Double
 quantile q xs
   | h < 1     = head ys
