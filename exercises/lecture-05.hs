@@ -47,3 +47,35 @@ addPredecessor xs = f (0:xs) []
   where
     f (x:y:ys) acc = f (y:ys) (acc ++ [x+y])
     f _        acc = acc
+
+-- | 3.1
+--   Define a function that given a list of triplets (x,y,z), filters all
+--   triplets for which x==y==z.
+equalTriplets :: (Eq a) => [(a, a, a)] -> [(a, a, a)]
+equalTriplets [] = []
+equalTriplets ((x,y,z):xs)
+  | x == y && x == z = (x,y,z) : equalTriplets xs
+  | otherwise        = equalTriplets xs
+
+-- list comprehension
+equalTriplets' :: (Eq a) => [(a, a, a)] -> [(a, a, a)]
+equalTriplets' xs = [(x,y,z) | (x,y,z) <- xs, x == y, x ==z]
+
+-- filter
+equalTriplets'' :: (Eq a) => [(a, a, a)] -> [(a, a, a)]
+equalTriplets'' xs = filter allEq xs
+  where
+    allEq (x,y,z) = x == y && x == z
+
+-- | 3.2
+--   Define your own version of the replicate function.
+replicate' :: Int -> a -> [a]
+replicate' 0 _ = []
+replicate' n x = x : replicate' (n - 1) x
+
+-- tail recursive
+replicate'' :: Int -> a -> [a]
+replicate'' n x = f n []
+  where
+    f 0 acc = acc
+    f m acc = f (m - 1) (x:acc)
