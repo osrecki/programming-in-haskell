@@ -29,3 +29,12 @@ headsOf :: [[a]] -> [a]
 headsOf []          = []
 headsOf ((x:_):xss) = x : headsOf xss
 headsOf ([]:xss)    = headsOf xss
+
+-- | 2.1
+--   Define a recursive function 'modMult n m xs' that multiplies each
+--   element of a list 'xs' with 'n' modulo 'm'.
+modMult :: (Integral a, Num b) => a -> a -> [b] -> [b]
+modMult _ _ [] = []
+modMult n m (x:xs) = x' : modMult n m xs
+  where
+    x' = x * fromIntegral (n `mod` m)
