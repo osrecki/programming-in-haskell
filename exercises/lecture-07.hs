@@ -70,3 +70,15 @@ applyManyTimes n f x
 --   Using 'applyManyTimes' define 'applyTwice'.
 applyTwice :: (a -> a) -> a -> a
 applyTwice = applyManyTimes 2
+
+-- | 3.1
+--   Define a function which turns a list into list of lists
+--   containing each element.
+listifylist :: [a] -> [[a]]
+listifylist = map (:[])
+
+-- | 3.2
+--   Define a function which cuts off all values from the list
+--   at the value 'n'.
+cutoff :: (Num a, Ord a) => a -> [a] -> [a]
+cutoff n = map (min n)
