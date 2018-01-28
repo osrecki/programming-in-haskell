@@ -27,7 +27,7 @@ firstColumn ((x:_):xss) = x : firstColumn xss
 
 -- | 1.3
 --   Define a function that repeats three times the initial letter of
---  each word in a string.
+--   each word in a string.
 shoutOutLoud :: String -> String
 shoutOutLoud = unwords . map (repeatFirst 3) . words
 
@@ -88,3 +88,18 @@ pad' a b =
 
 quartiles' :: [Double] -> (Double, Double, Double)
 quartiles' xs = let f q = quantile q xs in (f 0.25, f 0.5, f 0.75)
+
+-- | 4.1
+--   Write a function that takes in a pair (a, b) and a list [c] and returns
+--   the following string:
+--   "The pair [contains two ones|contains one one|does not contain a single
+--   one] and the second element of the list is <x>"
+describe :: (Show a) => (Int, Int) -> [a] -> String
+describe (x, y) zs = describePair ++ " and " ++ describeList
+  where
+    describePair = "The pair " ++ case (x, y) of
+      (1, 1) -> "contains two ones"
+      (p, q) | p == 1 || q == 1 -> "contains one one"
+      _      -> "does not contain a single one"
+    describeList = "the second element of the list is " ++ show secondElem
+    secondElem = head . tail $ zs
