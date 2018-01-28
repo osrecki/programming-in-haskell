@@ -77,3 +77,14 @@ quantile q xs
     d = h - fromIntegral h'
     xi = ys !! (h' - 1)
     xj = ys !! h'
+
+-- | 3. Redo exercise 2 using 'let' instead of 'where'.
+pad' :: String -> String -> (String, String)
+pad' a b =
+  let l = maxBy length a b
+      transform s = appendSpaces (l - length s) $ capitalize s
+  in (transform a, transform b)
+
+
+quartiles' :: [Double] -> (Double, Double, Double)
+quartiles' xs = let f q = quantile q xs in (f 0.25, f 0.5, f 0.75)
