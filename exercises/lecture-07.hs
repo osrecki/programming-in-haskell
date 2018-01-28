@@ -5,6 +5,7 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture7Exercises where
 
+import           Control.Arrow
 import           Data.Tuple
 
 -- | 1
@@ -104,3 +105,33 @@ freq x = length . filter (== x)
 --   times in a list.
 freqFilter :: Eq a => Int -> [a] -> [a]
 freqFilter n xs = filter (\x -> freq x xs >= n) xs
+
+-- | 5
+--   Define the following functions using lambda expressions.
+-- | 5.1
+--   Define a function that given a list, filters all elements
+--   that fall within the specified interval.
+withinInterval :: (Num a, Ord a) => a -> a -> [a] -> [a]
+withinInterval n m = filter (\x -> n <= x && x <= m)
+
+-- | 5.2
+--   Define a function which returns the second column of the matrix,
+--   encoded as a list of lists.
+sndColumn :: [[a]] -> [a]
+sndColumn = map (\row -> row !! 1)
+
+sndColumn' :: [[a]] -> [a]
+sndColumn' = map (!! 1)
+
+-- | 5.3
+--   Define a function which takes a list of pairs and returns a list
+--   of the pairs so that the first element in the pair is smaller than
+--   the second one. If elements are equal, the pair is discarded.
+canonicalizePairs :: Ord a => [(a, a)] -> [(a, a)]
+canonicalizePairs = map (\x -> (min' x, max' x)) . filter (\(a,b) -> a /= b)
+  where
+    min' = uncurry min
+    max' = uncurry max
+
+canonicalizePairs' :: Ord a => [(a, a)] -> [(a, a)]
+canonicalizePairs' = map (uncurry min &&& uncurry max) . filter (uncurry (/=))
