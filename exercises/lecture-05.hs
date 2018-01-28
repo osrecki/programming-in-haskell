@@ -113,3 +113,22 @@ takeFromTo _ _ []     = []
 takeFromTo 0 0 (x:_)  = [x]
 takeFromTo 0 j (x:xs) = x : takeFromTo 0 (j - 1) xs
 takeFromTo i j (_:xs) = takeFromTo (i - 1) (j - 1) xs
+
+-- | 5.1
+--   Define a recursive function that retains every third element in a list.
+eachThird :: [a] -> [a]
+eachThird xs = eachNth 3 xs
+
+eachNth :: Int -> [a] -> [a]
+eachNth n = eachNthRec n n
+
+eachNthRec :: Int -> Int -> [a] -> [a]
+eachNthRec _ _ []     = []
+eachNthRec n 1 (x:xs) = x : eachNthRec n n xs
+eachNthRec n i (_:xs) = eachNthRec n (i - 1) xs
+
+-- | 5.2
+--   Define a recursive function that zips two lists in a crossing manner.
+crossZip :: [a] -> [b] -> [(a, b)]
+crossZip (x:x':xs) (y:y':ys) = (x,y') : (x',y) : crossZip xs ys
+crossZip _ _                 = []
