@@ -42,3 +42,31 @@ index' = zipWith swap' [0..]
 divider :: Int -> String
 divider = replicate' '='
   where replicate' = flip replicate
+
+-- | 2.1 a
+--   Define a function that applies a binary function on the last
+--   elements of two lists.
+applyOnLast :: (a -> b -> c) -> [a] -> [b] -> c
+applyOnLast f xs ys = f (last xs) (last ys)
+
+-- | 2.1 b
+--   Using 'applyOnLast' and 'addThree' define a function that adds
+--   last elements of the lists and 100.
+lastTwoPlus100 :: (Num a) => [a] -> [a] -> a
+lastTwoPlus100 = applyOnLast (addThree 100)
+
+addThree :: Num a => a -> a -> a -> a
+addThree a b c = a + b + c
+
+-- | 2.2 a
+--   Define a function that applies 'n' times function 'f' to argument
+--   'x'. If n <= 0, return 'x' unaltered.
+applyManyTimes :: (Num a, Ord a) => a -> (b -> b) -> b -> b
+applyManyTimes n f x
+  | n <= 0    = x
+  | otherwise = applyManyTimes (n - 1) f (f x)
+
+-- | 2.2 b
+--   Using 'applyManyTimes' define 'applyTwice'.
+applyTwice :: (a -> a) -> a -> a
+applyTwice = applyManyTimes 2
