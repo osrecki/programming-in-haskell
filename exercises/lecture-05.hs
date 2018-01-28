@@ -38,3 +38,12 @@ modMult _ _ [] = []
 modMult n m (x:xs) = x' : modMult n m xs
   where
     x' = x * fromIntegral (n `mod` m)
+
+-- | 2.2
+--   Define a function that adds the value of the preceding element to
+--   each element of the list. The first element gets no value added.
+addPredecessor :: Num a => [a] -> [a]
+addPredecessor xs = f (0:xs) []
+  where
+    f (x:y:ys) acc = f (y:ys) (acc ++ [x+y])
+    f _        acc = acc
