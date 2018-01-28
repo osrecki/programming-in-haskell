@@ -1,8 +1,8 @@
 # Programming in Haskell
 This repository contains solutions to in-class exercises and homework assignments for Programming in Haskell course:
 - [`lectures`](lectures/) contains code taught in the class
-- [`exercises`](exercises) contains solutions to in-class exercises
-- [`homework`](homework) contains solutions to homework assignments
+- [`exercises`](exercises) contains **solutions** to in-class exercises
+- [`homework`](homework) contains **solutions** to homework assignments
 
 ## Course Info
 **Course material from this and previous years is *publicly* available at the [course website](https://www.fer.unizg.hr/predmet/puh/materijali).**
