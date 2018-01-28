@@ -71,6 +71,8 @@ applyManyTimes n f x
 applyTwice :: (a -> a) -> a -> a
 applyTwice = applyManyTimes 2
 
+-- | 3
+--   Define the following functions using 'map'.
 -- | 3.1
 --   Define a function which turns a list into list of lists
 --   containing each element.
@@ -82,3 +84,23 @@ listifylist = map (:[])
 --   at the value 'n'.
 cutoff :: (Num a, Ord a) => a -> [a] -> [a]
 cutoff n = map (min n)
+
+-- | 4
+--   Define the following functions using 'map' and 'filter'.
+-- | 4.1
+--   Define a function that adds the squares of all even numbers from a
+--   list.
+sumEvenSquares :: (Integral a) => [a] -> a
+sumEvenSquares = sum . map (^ 2) . filter even
+
+-- | 4.2
+--   Define a unction that counts how many times given element occurs
+--   in the list.
+freq :: Eq a => a -> [a] -> Int
+freq x = length . filter (== x)
+
+-- | 4.3
+--   Define a function that filters all elements that occur at least 'n'
+--   times in a list.
+freqFilter :: Eq a => Int -> [a] -> [a]
+freqFilter n xs = filter (\x -> freq x xs >= n) xs
