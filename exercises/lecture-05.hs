@@ -79,3 +79,37 @@ replicate'' n x = f n []
   where
     f 0 acc = acc
     f m acc = f (m - 1) (x:acc)
+
+-- | 4
+--   Extend 'take' so that, if n > length xs, the last element
+--   of the list gets repeated.
+take'' :: Int -> [a] -> [a]
+take'' n xs
+  | n > length xs = take n $ xs ++ repeat (last xs)
+  | otherwise     = take n xs
+
+-- | 4.1 a
+--   Define your own recursive version of the drop function.
+drop' :: Int -> [a] -> [a]
+drop' n xs     | n <= 0 = xs
+drop' _ []     = []
+drop' n (_:xs) = drop' (n - 1) xs
+
+-- | 4.1 b
+--   Define drop'' (a wrapper function) so that for n < 0 the
+--   function drops the elements from the end of the list.
+drop'' :: Int -> [a] -> [a]
+drop'' n xs
+  | n < 0     = reverse $ drop' (abs n) (reverse xs)
+  | otherwise = drop' n xs
+
+-- | 4.2
+--   Define a recursive function 'takeFromTo n1 n2 xs'.
+takeFromTo :: Int -> Int -> [a] -> [a]
+takeFromTo n m xs
+  | n < 0 = takeFromTo 0 m xs
+  | m < n = []
+takeFromTo _ _ []     = []
+takeFromTo 0 0 (x:_)  = [x]
+takeFromTo 0 j (x:xs) = x : takeFromTo 0 (j - 1) xs
+takeFromTo i j (_:xs) = takeFromTo (i - 1) (j - 1) xs
