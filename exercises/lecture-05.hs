@@ -117,7 +117,12 @@ takeFromTo i j (_:xs) = takeFromTo (i - 1) (j - 1) xs
 -- | 5.1
 --   Define a recursive function that retains every third element in a list.
 eachThird :: [a] -> [a]
-eachThird xs = eachNth 3 xs
+eachThird (_:_:x:xs) = x : eachThird xs
+eachThird _          = []
+
+-- alternative, more general solution
+eachThird' :: [a] -> [a]
+eachThird' = eachNth 3
 
 eachNth :: Int -> [a] -> [a]
 eachNth n = eachNthRec n n
