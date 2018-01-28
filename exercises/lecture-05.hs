@@ -21,3 +21,11 @@ product'' xs = f 1 xs
 -- usign foldr
 product''' :: (Num a) => [a] -> a
 product''' xs = foldr (*) 1 xs
+
+-- | 1.2
+--   Define a recursive function that takes a list of lists and
+--   returns a list of their heads.
+headsOf :: [[a]] -> [a]
+headsOf []          = []
+headsOf ((x:_):xss) = x : headsOf xss
+headsOf ([]:xss)    = headsOf xss
