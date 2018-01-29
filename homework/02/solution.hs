@@ -126,10 +126,6 @@ suffixes = ["", " thousand", " million", " billion", " thrillion"]
 --
 --   However, it comes in handy when we need a placeholder in the
 --   code. It can be implemented in several ways:
-
-undefinedFunc :: Int -> Int
-undefinedFunc x = x + undefined
-
 -- as an infinite loop
 undefined' :: a
 undefined' = undefined'
@@ -137,3 +133,7 @@ undefined' = undefined'
 -- as a crash
 undefined'' :: a
 undefined'' | False = undefined''
+
+-- example using custom undefined
+funcWithUndefined :: Int -> Int
+funcWithUndefined x = x + undefined'
