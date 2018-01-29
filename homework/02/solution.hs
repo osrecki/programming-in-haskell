@@ -132,7 +132,7 @@ undefined' = undefined'
 
 -- as a crash
 undefined'' :: a
-undefined'' | False = undefined''
+undefined'' | False = undefined'' -- non-exhaustive pattern matching
 
 -- example using custom undefined
 funcWithUndefined :: Int -> Int
