@@ -57,3 +57,32 @@ negIf False x = abs x
 greatestCD :: Int -> Int -> Int
 greatestCD x 0 = x
 greatestCD x y = greatestCD y (x `mod` y)
+
+-- | 4
+--   Define your own version of undefined.
+--
+--   undefined has an unconstrained type 'a' which allows us to
+--   use it anywhere in the code. This is because its type gets
+--   specialized based on the context in which it is used.
+--
+--   E.g., undefined specialized to type Int:
+-- >  f :: Int -> Int
+-- >  f x = x + undefined
+--
+--   undefined does not have any meaningful value. This means that
+--   program breaks if it reaches a step where the value of undefined
+--   is needed.
+--
+--   However, it comes in handy when we need a placeholder in the
+--   code. It can be implemented in several ways:
+
+undefinedFunc :: Int -> Int
+undefinedFunc x = x + undefined
+
+-- as an infinite loop
+undefined' :: a
+undefined' = undefined'
+
+-- as a crash
+undefined'' :: a
+undefined'' | False = undefined''
