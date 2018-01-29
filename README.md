@@ -1,7 +1,7 @@
 # Programming in Haskell
 This repository contains solutions to in-class exercises and homework assignments for Programming in Haskell course:
-- [`exercises`](exercises) contains **my solutions** to in-class exercises
-- [`homework`](homework) contains **my solutions** to homework assignments
+- [`exercises`](exercises) contains my **solutions** to in-class exercises
+- [`homework`](homework) contains my **solutions** to homework assignments
 - [`lectures`](lectures/) contains code taught in the class
 
 ## Course Info
