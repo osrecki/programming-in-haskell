@@ -58,6 +58,57 @@ greatestCD :: Int -> Int -> Int
 greatestCD x 0 = x
 greatestCD x y = greatestCD y (x `mod` y)
 
+-- | 3
+--   Implement a function which converts the number into its
+--   English counterpart. It must support numbers up to millions.
+numberToWords :: Int -> String
+numberToWords n = unwords $ reverse $ zipWith (++) words' suffixes
+  where
+    groups = numToGroups n
+    words' = map (groupToString "") groups
+
+-- | Breaks a number into 3-digit groups.
+numToGroups :: (Integral a) => a -> [a]
+numToGroups n
+    | d == 0    = [n]
+    | otherwise = m : numToGroups d
+  where
+    (d,m) = n `divMod` 1000
+
+-- | Converts a 3-digit group to word.
+groupToString :: String -> Int -> String
+groupToString prefix n
+    | n == 0    = ""
+    | n < 10    = prefix ++ ones n
+    | n < 20    = prefix ++ teens n
+    | n < 100   = prefix ++ tens d ++ groupToString "-" m
+    | n < 1000  = ones d' ++ " hundred " ++ groupToString "and " m'
+    | otherwise = "invalid number"
+  where
+    (d,m)  = n `divMod` 10
+    (d',m') = n `divMod` 100
+
+ones :: Int -> String
+ones n = xs !! (n - 1)
+  where
+    xs = ["one", "two", "three", "four", "five", "six", "seven", "eight",
+          "nine"]
+
+teens :: Int -> String
+teens n = xs !! (n - 10)
+  where
+    xs = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+          "sixteen", "seventeen", "eighteen", "nineteen"]
+
+tens :: Int -> String
+tens n = xs !! (n - 2)
+  where
+    xs = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
+          "ninety"]
+
+suffixes :: [String]
+suffixes = ["", " thousand", " million", " billion", " thrillion"]
+
 -- | 4
 --   Define your own version of undefined.
 --
