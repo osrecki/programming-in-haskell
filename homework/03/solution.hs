@@ -49,7 +49,7 @@ rule90Rec xs = step : rule90Rec step
   where
     step = rule90Step xs
 
--- | Given current step, calculates the next one
+-- | Given current step, calculates the next one.
 rule90Step :: [Bool] -> [Bool]
 rule90Step xs = zipWith xor ps qs
   where
@@ -59,9 +59,23 @@ rule90Step xs = zipWith xor ps qs
 pretty :: [[Bool]] -> String
 pretty = unlines . map prettyOne
 
--- | Converts one step to String
+-- | Converts one step to String.
 prettyOne :: [Bool] -> String
 prettyOne = map boolToChar
   where
     boolToChar True  = '#'
     boolToChar False = ' '
+
+-- | 4
+--   Define a function that generate a look-and-say sequence.
+--   <https://en.wikipedia.org/wiki/Look-and-say_sequence>
+f :: [String]
+f = "1" : map fStep f
+
+-- | Given the current step, calculates the next one.
+fStep :: String -> String
+fStep "" = ""
+fStep s@(c:_) = l ++ [c] ++ fStep rest
+  where
+    l = show $ length $ takeWhile (== c) s
+    rest = dropWhile (== c) s
