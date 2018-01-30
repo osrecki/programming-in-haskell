@@ -5,6 +5,7 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture8Exercises where
 
+import           Control.Arrow
 import           Data.Char
 
 -- | 1
@@ -40,3 +41,29 @@ initials3 d p = concatMap initial . filter p . words
 --   Use 'initials3' to define 'initials' function.
 initials :: String -> String
 initials = initials3 "." (const True)
+
+-- | 2.1 a
+--   Define a function that returns the maximum difference
+--   between consecutive elements in the list.
+maxDiff :: [Int] -> Int
+maxDiff xs = maximum . map abs . zipWith (-) xs $ tail xs
+
+-- | 2.1 b
+--   Define a function that returns the pair (min_diff, max_diff).
+minMaxDiff :: [Int] -> (Int,Int)
+minMaxDiff xs = (minimum &&& maximum) diffs
+  where
+    diffs = map abs . zipWith (-) xs $ tail xs
+
+-- 'maxDiff' by using 'minMaxDiff'
+maxDiff' :: [Int] -> Int
+maxDiff' = snd . minMaxDiff
+
+-- | 2.2
+--   Define a function 'studentsPassed' that given a list [(Name,Score)],
+--   returns the names of all students who scored at least 50% of the
+--   maximum score.
+studentsPassed :: [(String,Double)] -> [String]
+studentsPassed xs = map fst . filter ((>= threshold) . snd) $ xs
+  where
+    threshold = (/2) . maximum . map snd $ xs
