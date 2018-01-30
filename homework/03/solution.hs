@@ -37,7 +37,8 @@ transformOne (n,s) = map charToTuple s
 --   <https://en.wikipedia.org/wiki/Rule_90>
 --
 --   Example for Sierpinski triangle:
--- >  let xs = replicate 7 False ++ [True] ++ replicate 7 False
+-- >  let fs = replicate 7 False
+-- >  let xs = fs ++ [True] ++ fs
 -- >  putStrLn $ pretty $ take 8 $ rule90 xs
 --
 rule90 :: [Bool] -> [[Bool]]
