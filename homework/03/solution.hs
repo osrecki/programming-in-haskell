@@ -42,12 +42,7 @@ transformOne (n,s) = map charToTuple s
 -- >  putStrLn $ pretty $ take 8 $ rule90 xs
 --
 rule90 :: [Bool] -> [[Bool]]
-rule90 xs = xs : rule90Rec xs
-
-rule90Rec :: [Bool] -> [[Bool]]
-rule90Rec xs = step : rule90Rec step
-  where
-    step = rule90Step xs
+rule90 xs = xs : rule90 (rule90Step xs)
 
 -- | Given current step, calculates the next one.
 rule90Step :: [Bool] -> [Bool]
