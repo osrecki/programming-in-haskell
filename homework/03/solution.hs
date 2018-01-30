@@ -5,6 +5,7 @@ Maintainer  : Dinko Osrecki
 -}
 module Homework3Tasks where
 
+import           Data.Bits
 import           Data.Char
 
 -- | 1
@@ -28,3 +29,38 @@ transformOne :: (Int,String) -> [(Char,Int)]
 transformOne (n,s) = map charToTuple s
   where
     charToTuple c = (toLower c, n)
+
+-- | 3
+--   Implement a simplified version of the cellular automaton,
+--   which works on a fixed-size array, and only implements
+--   the Rule 90.
+--   <https://en.wikipedia.org/wiki/Rule_90>
+--
+--   Example for Sierpinski triangle:
+-- >  let xs = replicate 7 False ++ [True] ++ replicate 7 False
+-- >  putStrLn $ pretty $ take 8 $ rule90 xs
+--
+rule90 :: [Bool] -> [[Bool]]
+rule90 xs = xs : rule90Rec xs
+
+rule90Rec :: [Bool] -> [[Bool]]
+rule90Rec xs = step : rule90Rec step
+  where
+    step = rule90Step xs
+
+-- | Given current step, calculates the next one
+rule90Step :: [Bool] -> [Bool]
+rule90Step xs = zipWith xor ps qs
+  where
+    ps = False : init xs
+    qs = tail xs ++ [False]
+
+pretty :: [[Bool]] -> String
+pretty = unlines . map prettyOne
+
+-- | Converts one step to String
+prettyOne :: [Bool] -> String
+prettyOne = map boolToChar
+  where
+    boolToChar True  = '#'
+    boolToChar False = ' '
