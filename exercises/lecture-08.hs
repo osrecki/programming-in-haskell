@@ -7,6 +7,9 @@ module Lecture8Exercises where
 
 import           Control.Arrow
 import           Data.Char
+import           Data.Function
+import           Data.List
+import           Data.Ord
 
 -- | 1
 --   Define the following functions using composition and
@@ -67,3 +70,36 @@ studentsPassed :: [(String,Double)] -> [String]
 studentsPassed xs = map fst . filter ((>= threshold) . snd) $ xs
   where
     threshold = (/2) . maximum . map snd $ xs
+
+-- | 3.1
+--   Define a function which checks whether every word in a string is
+--   capitalized.
+isTitleCased :: String -> Bool
+isTitleCased = all isUpper . map head . words
+
+-- | 3.2
+--   Define a function which sorts the list of pairs in ascending
+--   order with respect to the second element of a pair.
+sortPairs :: (Ord b) => [(a,b)] -> [(a,b)]
+sortPairs = sortBy (comparing snd)
+
+sortPairs' :: (Ord b) => [(a,b)] -> [(a,b)]
+sortPairs' = sortBy (compare `on` snd)
+
+-- | 3.3
+--   Define a function which extracts the the name of the
+--   file from a file path.
+--   Example:
+--
+-- >>> filename "/etc/init/cron.conf"
+-- cron.conf
+--
+filename :: String -> String
+filename = reverse . takeWhile (/= '/') . reverse
+
+-- | 3.4
+--   Define a function which returns the indices of the
+--   maximum element in a list. Return "empty list" error
+--   if the list is empty.
+maxElemIndices :: (Ord a) => [a] -> [Int]
+maxElemIndices xs = elemIndices (maximum xs) xs
