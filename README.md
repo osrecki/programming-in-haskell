@@ -7,7 +7,7 @@ This repository contains solutions to in-class exercises and homework assignment
 - [`lectures`](lectures/) contains code taught in the class
 
 ## Course Info
-**Course material from this and previous years is *publicly* available at the [course website](https://www.fer.unizg.hr/predmet/puh/materijali).**
+**Course material from this and previous years is *publicly* available on the [course website](https://www.fer.unizg.hr/predmet/puh/materijali).**
 
 [Programming in Haskell](https://www.fer.unizg.hr/en/course/pih) is a course offered to undergraduate and graduate students at the Faculty of Electrical Engineering and Computing, University of Zagreb.
 
