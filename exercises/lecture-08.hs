@@ -128,3 +128,29 @@ nubRuns = foldr prependElem []
     prependElem x ys@(y:_)
       | x == y    = ys
       | otherwise = x:ys
+
+-- | 5.1
+--   Write 'reverse' using 'foldl'.
+reverse''' :: [a] -> [a]
+reverse''' = foldl (flip (:)) []
+
+-- | 5.2
+--   Using 'foldl' define function 'sumEven' from task 1.1.
+sumEven' :: (Num a) => [a] -> a
+sumEven' = snd . foldl add (0, 0)
+  where
+    add :: (Num a) => (Int,a) -> a -> (Int,a)
+    add (i,acc) x
+      | even i    = (i+1, acc+x)
+      | otherwise = (i+1, acc)
+
+-- | 5.3
+--  Using 'foldl' define a function which, given a list of tuples,
+--  returns the maximum element at the 1st position in a pair and
+--  the maximum element at the 2nd position in the pair. Return
+--  "empty list" error if the list is empty.
+maxUnzip :: (Bounded a, Ord a) => [(a,a)] -> (a,a)
+maxUnzip [] = error "empty list"
+maxUnzip xs = foldl maxTuple (minBound,minBound) xs
+  where
+    maxTuple (m1,m2) (x,y) = (max m1 x, max m2 y)
