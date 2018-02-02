@@ -103,3 +103,28 @@ filename = reverse . takeWhile (/= '/') . reverse
 --   if the list is empty.
 maxElemIndices :: (Ord a) => [a] -> [Int]
 maxElemIndices xs = elemIndices (maximum xs) xs
+
+-- | 4.1
+--   Define 'elem' using 'foldr'.
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' y = foldr (\x acc -> acc || x == y) False
+
+-- | 4.2
+--   Define 'reverse' using 'foldr'.
+reverse' :: [a] -> [a]
+reverse' = foldr (\x acc -> acc ++ [x]) []
+
+-- more performant definition
+reverse'' :: [a] -> [a]
+reverse'' xs = foldr (\x acc -> acc . (x:)) id xs []
+
+-- | 4.3
+--   Using 'foldr' define 'nubRuns' that removes consecutively
+--   repeated elements from a list.
+nubRuns :: Eq a => [a] -> [a]
+nubRuns = foldr prependElem []
+  where
+    prependElem x [] = [x]
+    prependElem x ys@(y:_)
+      | x == y    = ys
+      | otherwise = x:ys
