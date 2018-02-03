@@ -61,19 +61,21 @@ inShapes xs p = any (`inShape` p) xs
 --   Define your type 'Vehicle' that can be a 'Car', 'Truck',
 --  'Motorcycle', or 'Bicycle'. The first three store a name
 --   of the manufacturer (String) and horsepower (Double).
-data Vehicle = Car String Double
-             | Truck String Double
-             | Motorcycle String Double
+type Manufacturer = String
+type Horsepower = Double
+data Vehicle = Car Manufacturer Horsepower
+             | Truck Manufacturer Horsepower
+             | Motorcycle Manufacturer Horsepower
              | Bicycle
              deriving (Show)
 
 -- | 1.4 b
 --   Write a function 'totalHorsepower' that adds up the horsepower
 --   of the vehicles, assuming that bicycle's horsepower is 0.2.
-totalHorsepower :: [Vehicle] -> Double
+totalHorsepower :: [Vehicle] -> Horsepower
 totalHorsepower = sum . map horsepower
 
-horsepower :: Vehicle -> Double
+horsepower :: Vehicle -> Horsepower
 horsepower (Car _ h)        = h
 horsepower (Truck _ h)      = h
 horsepower (Motorcycle _ h) = h
