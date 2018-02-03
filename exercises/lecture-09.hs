@@ -6,6 +6,7 @@ Maintainer  : Dinko Osrecki
 module Lecture9Exercises where
 
 import           Data.List
+import           Data.Maybe
 import           Data.Ord
 
 -- | 1.1
@@ -123,8 +124,47 @@ rankedStudents l =
 --   exists in the list, the function should return an error.
 addStudent :: Student -> [Student] -> [Student]
 addStudent s xs
-  | existsStudent s xs = error "duplicate matriculation ID"
+  | existsStudent s xs = error "duplicate matriculation number"
   | otherwise          = s:xs
 
 existsStudent :: Student -> [Student] -> Bool
 existsStudent s = elem (studentId s) . map studentId
+
+-- | 3.1 a
+--   Define your own parametrized type 'MyTriplet' which contains
+--   the values of three different types. Do this using a record.
+data MyTriplet a b c = MyTriplet { _1 :: a
+                                 , _2 :: b
+                                 , _3 :: c
+                                 } deriving (Show)
+
+-- | 3.1 b
+--   Define a function which converts a 'MyTriplet' value into an
+--   ordinary triplet.
+toTriplet :: MyTriplet a b c -> (a, b, c)
+toTriplet t = (_1 t, _2 t, _3 t)
+
+-- | 3.2
+--   Define a function which sums the known salaries of employees
+--   (salaries that are not 'Nothing').
+data Employee = Employee { name   :: String
+                         , salary :: Maybe Double
+                         } deriving (Show)
+
+totalSalaries :: [Employee] -> Double
+totalSalaries = sum . map (fromMaybe 0 . salary)
+
+-- | 3.3 a
+--   Write a function 'addStudent2' that works like 'addStudent'
+--   from task 2.4, but returns a 'Maybe' instead of an error.
+addStudent2 :: Student -> [Student] -> Maybe [Student]
+addStudent2 s xs
+  | existsStudent s xs = Nothing
+  | otherwise          = Just $ s:xs
+
+-- | 3.3 b
+--   Write 'addStudent3' that returns an 'Either'.
+addStudent3 :: Student -> [Student] -> Either String [Student]
+addStudent3 s xs
+  | existsStudent s xs = Left "duplicate matriculation number"
+  | otherwise          = Right $ s:xs
