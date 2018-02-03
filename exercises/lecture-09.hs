@@ -67,6 +67,7 @@ data Vehicle = Car String Double
              | Truck String Double
              | Motorcycle String Double
              | Bicycle
+             deriving (Show)
 
 -- | 1.4 b
 --   Write a function 'totalHorsepower' that adds up the horsepower
