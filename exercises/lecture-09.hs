@@ -53,12 +53,6 @@ inShape (Rectangle (Point x1 y1) (Point x2 y2)) (Point a b) =
 inShapes :: [Shape] -> Point -> Bool
 inShapes xs p = any (`inShape` p) xs
 
-inShapes' :: [Shape] -> Point -> Bool
-inShapes' [] _ = False
-inShapes' (s:ss) p
-  | inShape s p = True
-  | otherwise   = inShapes' ss p
-
 -- | 1.4 a
 --   Define your type 'Vehicle' that can be a 'Car', 'Truck',
 --  'Motorcycle', or 'Bicycle'. The first three store a name
