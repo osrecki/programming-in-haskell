@@ -5,6 +5,9 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture9Exercises where
 
+import           Data.List
+import           Data.Ord
+
 -- | 1.1
 --   Define a 'Date' structure with the appropriate fields.
 --   Define a function that shows a date in the DD.MM.YYYY
@@ -74,3 +77,54 @@ horsepower (Car _ h)        = h
 horsepower (Truck _ h)      = h
 horsepower (Motorcycle _ h) = h
 horsepower Bicycle          = 0.2
+
+-- | 2
+data Level = Bachelor | Master | PhD deriving (Show, Eq, Enum, Ord)
+data Student = Student { studentId :: String
+                       , firstName :: String
+                       , lastName  :: String
+                       , level     :: Level
+                       , avgGrade  :: Double
+                       } deriving (Show)
+
+-- | 2.1
+--   Define a function that increases the average grade of
+--   the student by 1.0, but not above 5.0.
+improveStudent :: Student -> Student
+improveStudent s = s { avgGrade = g }
+  where
+    g = min 5 (avgGrade s + 1)
+
+-- | 2.2
+--   Write a function to compute the average grade of
+--   students for the different study levels.
+avgGradePerLevels :: [Student] -> (Double, Double, Double)
+avgGradePerLevels xs = (avgGradePerLevel Bachelor xs,
+                        avgGradePerLevel Master xs,
+                        avgGradePerLevel PhD xs)
+
+avgGradePerLevel :: Level -> [Student] -> Double
+avgGradePerLevel l = average . map avgGrade . filter ((==) l . level)
+
+average :: (Fractional a) => [a] -> a
+average xs = sum xs / genericLength xs
+
+-- | 2.3
+--   Write a function which returns a list of matriculation
+--   numbers for a given study level, sorted by average grade
+--   in descending order.
+rankedStudents :: Level -> [Student] -> [String]
+rankedStudents l =
+  map studentId . sortOn (Down . avgGrade) . filter ((==) l . level)
+
+-- | 2.4
+--   Write a function which adds a student to a list of students.
+--   If a student with an identical matriculation number already
+--   exists in the list, the function should return an error.
+addStudent :: Student -> [Student] -> [Student]
+addStudent s xs
+  | existsStudent s xs = error "duplicate matriculation ID"
+  | otherwise          = s:xs
+
+existsStudent :: Student -> [Student] -> Bool
+existsStudent s = elem (studentId s) . map studentId
