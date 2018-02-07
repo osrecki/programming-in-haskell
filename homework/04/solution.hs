@@ -91,3 +91,21 @@ partitions' (x:xs) = concatMap (extendPartition x) (partitions' xs)
 extendPartition :: a -> [[a]] -> [[[a]]]
 extendPartition x []       = [[[x]]]
 extendPartition x (xs:xss) = ((x:xs):xss) : map (xs:) (extendPartition x xss)
+
+-- | 3
+--   Define a function which – given a list – returns a list of
+--   all its permutations. Implement it using explicit recursion.
+permutations' :: [a] -> [[a]]
+permutations' []     = [[]]
+permutations' (x:xs) = concatMap (extendPermutation x) (permutations' xs)
+
+-- | Takes an element and a permutation and extends it into
+--   several permutations by adding the element at every
+--   possible position in turn.
+--
+--   Example:
+-- >>> extendPermutation '1' "234"
+-- ["1234","2134","2314","2341"]
+extendPermutation :: a -> [a] -> [[a]]
+extendPermutation x []     = [[x]]
+extendPermutation x (y:ys) = (x:y:ys) : map (y:) (extendPermutation x ys)
