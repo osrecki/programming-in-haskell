@@ -8,6 +8,7 @@ module Lecture10Exercises where
 import           Control.Applicative ()
 import           Data.List
 import           Data.Maybe
+import           Data.Set            (fromList)
 
 -- | 1
 data Sex = Male | Female deriving (Show, Read, Eq, Ord)
@@ -67,7 +68,7 @@ descendants p = kids ++ concatMap descendants kids
 
 -- | 2
 infixr 5 :-:
-data MyList a = Empty | a :-: (MyList a) deriving (Show, Read, Ord, Eq)
+data MyList a = Empty | a :-: (MyList a) deriving (Show)
 
 -- | 2.1
 --   Define a function to return the head of MyList.
@@ -82,7 +83,7 @@ listMap _ Empty      = Empty
 listMap f (x :-: xs) = f x :-: listMap f xs
 
 -- | 3
-data Tree a = Null | Node a (Tree a) (Tree a) deriving (Show, Eq)
+data Tree a = Null | Node a (Tree a) (Tree a) deriving (Show)
 
 -- | 3.1
 --   Define a function which finds the maximum element in a tree.
@@ -166,3 +167,20 @@ instance Show Person where
 
 fullName :: Person -> String
 fullName p = firstName p ++ " " ++ lastName p
+
+-- | 6.1
+--   Define an instance of 'Eq' for 'MyList a' so that two lists
+--   are considered equal if they have the same first element.
+instance (Eq a) => Eq (MyList a) where
+  (x :-: _) == (y :-: _) = x == y
+  _         == _         = False
+
+-- | 6.2
+--  Define an instance of 'Eq' for 'Tree a' so that two trees are
+--  considered equal if they store the same values, regardless of
+--  the position of these values in the trees, and regardless of
+--  duplicates.
+instance (Ord a) => Eq (Tree a) where
+  t1 == t2 = treeToSet t1 == treeToSet t2
+    where
+      treeToSet = fromList . treeToList
