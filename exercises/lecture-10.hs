@@ -111,3 +111,22 @@ levelCut 0 (Node x _ _) = Node x Null Null
 levelCut n (Node x l r) = Node x (nextLevelCut l) (nextLevelCut r)
   where
     nextLevelCut = levelCut (n - 1)
+
+-- | 4
+treeInsert :: (Ord a) => a -> Tree a -> Tree a
+treeInsert x Null = Node x Null Null
+treeInsert x t@(Node y l r)
+  | x < y     = Node y (treeInsert x l) r
+  | x > y     = Node y l (treeInsert x r)
+  | otherwise = t
+
+-- | 4.1
+--   Define a function that converts a list into a sorted tree.
+listToTree :: (Ord a) => [a] -> Tree a
+listToTree = foldr treeInsert Null
+
+-- | 4.2
+--   Using 'listToTree' and 'treeToList' defined previously, define
+--   a function which filters duplicates and sorts the list.
+sortAndNub :: Ord a => [a] -> [a]
+sortAndNub = treeToList . listToTree
