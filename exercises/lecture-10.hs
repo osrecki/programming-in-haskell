@@ -19,7 +19,7 @@ data Person = Person { personId  :: String
                      , father    :: Maybe Person
                      , partner   :: Maybe Person
                      , children  :: [Person]
-                     } deriving (Show, Read, Ord)
+                     } deriving (Read, Ord)
 
 instance Eq Person where
   p1 == p2 = personId p1 == personId p2
@@ -130,3 +130,39 @@ listToTree = foldr treeInsert Null
 --   a function which filters duplicates and sorts the list.
 sortAndNub :: Ord a => [a] -> [a]
 sortAndNub = treeToList . listToTree
+
+-- | 5
+data Weekday =
+  Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+  deriving (Show, Enum)
+
+-- | 5.1
+--   Define an 'Eq' instance for the 'Weekday' type that works
+--   like (==), except that two Fridays are never identical.
+instance Eq Weekday where
+  Monday    == Monday    = True
+  Tuesday   == Tuesday   = True
+  Wednesday == Wednesday = True
+  Thursday  == Thursday  = True
+  Saturday  == Saturday  = True
+  Sunday    == Sunday    = True
+  _         == _         = False
+
+-- | 5.2
+--   Define 'Person' as an instance of 'Show' type class so that instead
+--   of the values of partners and children only the respective person
+--   names are shown, which will enable the print out of an infinite
+--   structure of this type.
+instance Show Person where
+  show p = "Person {personId = "  ++ show (personId p)
+              ++ ", firstName = " ++ show (firstName p)
+              ++ ", lastName = "  ++ show (lastName p)
+              ++ ", sex = "       ++ show (sex p)
+              ++ ", mother = "    ++ show (fullName <$> mother p)
+              ++ ", father = "    ++ show (fullName <$> father p)
+              ++ ", partner = "   ++ show (fullName <$> partner p)
+              ++ ", children = "  ++ show (fullName <$> children p)
+              ++ "}"
+
+fullName :: Person -> String
+fullName p = firstName p ++ " " ++ lastName p
