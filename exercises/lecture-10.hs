@@ -80,3 +80,34 @@ listHead (x :-: _) = Just x
 listMap :: (a -> b) -> MyList a -> MyList b
 listMap _ Empty      = Empty
 listMap f (x :-: xs) = f x :-: listMap f xs
+
+-- | 3
+data Tree a = Null | Node a (Tree a) (Tree a) deriving (Show, Eq)
+
+-- | 3.1
+--   Define a function which finds the maximum element in a tree.
+--   Return an error if the tree is empty.
+treeMax :: (Ord a) => Tree a -> a
+treeMax Null = error "empty tree"
+treeMax t    = maximum $ elems t
+
+elems :: Tree a -> [a]
+elems Null         = []
+elems (Node x l r) = elems l ++ [x] ++ elems r
+
+-- | 3.2
+--   Define a function which will collect all elements from the
+--   inner nodes of a tree into the list in the in-order traversal.
+treeToList :: Tree a -> [a]
+treeToList = elems
+
+-- | 3.3
+--   Define a function to prune the tree at a given level (root
+--   has level 0).
+levelCut :: Int -> Tree a -> Tree a
+levelCut n _ | n < 0    = error "negative level"
+levelCut _ Null         = Null
+levelCut 0 (Node x _ _) = Node x Null Null
+levelCut n (Node x l r) = Node x (nextLevelCut l) (nextLevelCut r)
+  where
+    nextLevelCut = levelCut (n - 1)
