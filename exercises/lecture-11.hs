@@ -5,6 +5,8 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture11Exercises where
 
+import           Data.Foldable (toList)
+
 class Ageing a where
   maxAge :: a -> Int
   currentAge :: a -> Int
@@ -149,3 +151,44 @@ instance Functor RoseTree where
   fmap f (RoseTree x ts) = RoseTree (f x) ts'
     where
       ts' = map (fmap f) ts
+
+-- | 4.1
+--   Using 'foldr' from 'Foldable' class define a function which
+--   sums up the positive elements in a structure of a 't a' type.
+sumPositive :: (Foldable t, Num a, Ord a) => t a -> a
+sumPositive = foldr add 0
+  where
+    add x acc = acc + max 0 x
+
+-- | 4.2
+--   Using 'foldr' define a function which returns the size of
+--   any structure whose type is 'Foldable'.
+size :: Foldable t => t a -> Int
+size = foldr (const (+1)) 0
+
+-- | 4.3
+--   Define a function which tests whether all elements of a structure
+--   't a' are equal to each other.
+eqElems :: (Foldable t, Eq a) => t a -> Bool
+eqElems xs = all (== head ys) ys -- if 'ys' is empty 'head' is not evaluated
+  where
+    ys = toList xs
+
+-- | 4.4
+--   Define a 'Foldable' instance for 'RoseTree'.
+instance Foldable RoseTree where
+  foldMap _ RoseEmpty       = mempty
+  foldMap f (RoseTree x ys) = mconcat $ f x : ys'
+    where
+      ys' = map (foldMap f) ys
+
+{-|
+ Alternative implementation, by implementing 'foldr'.
+
+instance Foldable RoseTree where
+  foldr _ z RoseEmpty       = z
+  foldr f z (RoseTree x ys) = f x ys'
+    where
+      ys' = foldr (\y acc -> foldr f acc y) z ys
+
+-}
