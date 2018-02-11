@@ -70,3 +70,56 @@ instance Nameable Person where
 
 instance Nameable Dog where
   name d = dogName d ++ " the Dog"
+
+-- | 2
+data Tree a = Null | Node a (Tree a) (Tree a) deriving (Show, Eq)
+
+elems :: Tree a -> [a]
+elems Null         = []
+elems (Node x l r) = elems l ++ [x] ++ elems r
+
+-- | 2.1 a
+--   Define a 'Takeable' class with a function 'takeSome'.
+class Takeable t where
+  takeSome :: Int -> t a -> [a]
+
+-- | 2.1 b
+--   Define '[]' and 'Tree' as instances of 'Takeable'.
+--   Take elements form the tree using in-order traversal.
+instance Takeable [] where
+  takeSome = take
+
+instance Takeable Tree where
+  takeSome n = take n . elems
+
+-- | 2.2 a
+--   Define a 'Headed' class with a function which takes the
+--   head of the structure, and a function which removes the
+--   head and returns the rest.
+class Headed t where
+  headOf :: t a -> a
+  headOff :: t a -> t a
+
+-- | 2.2 b
+--   Define '[]', 'Tree', and 'Maybe' as instances of this type class.
+instance Headed [] where
+  headOf = head
+  headOff = tail
+
+instance Headed Maybe where
+  headOf Nothing  = error "Nothing"
+  headOf (Just x) = x
+
+  headOff Nothing = error "Nothing"
+  headOff _       = Nothing
+
+-- | Head of the tree in the sense of in-order traversal.
+instance Headed Tree where
+  headOf Null            = error "empty tree"
+  headOf (Node x Null _) = x
+  headOf (Node _ l _)    = headOf l
+
+  headOff Null               = error "empty tree"
+  headOff (Node _ Null Null) = Null
+  headOff (Node _ Null r)    = r
+  headOff (Node x l r)       = Node x (headOff l) r
