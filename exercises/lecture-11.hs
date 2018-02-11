@@ -123,3 +123,29 @@ instance Headed Tree where
   headOff (Node _ Null Null) = Null
   headOff (Node _ Null r)    = r
   headOff (Node x l r)       = Node x (headOff l) r
+
+-- | 3
+instance Functor Tree where
+  fmap _ Null         = Null
+  fmap f (Node x l r) = Node (f x) (fmap f l) (fmap f r)
+
+-- | 3.1
+--   Using 'fmap' define a function which will apply 'f' to each
+--   element of a tree of the 'Tree (Maybe a)' type.
+mapOnTreeMaybe :: (a -> b) -> Tree (Maybe a) -> Tree (Maybe b)
+mapOnTreeMaybe f = fmap (fmap f)
+
+-- | 3.2 a
+--   Define a 'RoseTree' type for trees in which each node can have
+--   a number of subtrees (a forest). As type constructors, use
+--   'RoseTree' and 'RoseEmpty'.
+type RoseForest a = [RoseTree a]
+data RoseTree a = RoseEmpty | RoseTree { val :: a, forest :: RoseForest a }
+
+-- | 3.2 b
+--   Make 'RoseTree' an instance of the 'Functor' class.
+instance Functor RoseTree where
+  fmap _ RoseEmpty = RoseEmpty
+  fmap f (RoseTree x ts) = RoseTree (f x) ts'
+    where
+      ts' = map (fmap f) ts
