@@ -2,7 +2,7 @@
 
 {-|
 Module      : Homework4Tasks
-Description : Solutions to homework 4 tasks
+Description : Solutions to Homework 4 exercises
 Maintainer  : Dinko Osrecki
 -}
 module Homework4Tasks where
@@ -10,51 +10,72 @@ module Homework4Tasks where
 import           Data.Function
 import           Data.List
 
--- | 1
---   Define following recursive functions and structures
---   with 'fix' and lambda functions only.
+-- EXERCISE 01 ----------------------------------------------------------------
 
--- | 1 a
---   Define non-accumulator style factorial.
+{-
+  1
+  - Define following recursive functions and structures with 'fix' and lambda
+    functions only.
+-}
+
+{-
+  1 a
+  - Define non-accumulator style factorial.
+-}
 factorial :: (Num a, Eq a) => a -> a
 factorial = fix (\rec n -> if n == 0 then 1 else n * rec (n - 1))
 
--- | 1 b
---   Define non-accumulator style sum.
+{-
+  1 b
+  - Define non-accumulator style sum.
+-}
 sum' :: (Num a) => [a] -> a
 sum' = fix (\rec -> \case { x:xs -> x + rec xs ; [] -> 0 })
 
--- | 1 c
---   Define accumulator style factorial.
+{-
+  1 c
+  - Define accumulator style factorial.
+-}
 factorial' :: (Num a, Eq a) => a -> a
 factorial' = fix (\rec acc n -> if n == 0 then acc else rec (acc * n) (n - 1)) 1
 
--- | 1 d
---   Define accumulator style sum.
+{-
+  1 d
+  - Define accumulator style sum.
+-}
 sum'' :: (Num a) => [a] -> a
 sum'' = fix (\rec acc -> \case { x:xs -> rec (acc + x) xs ; _ -> acc }) 0
 
--- | 1 e
---   Define the list of natural numbers.
+{-
+  1 e
+  - Define the list of natural numbers.
+-}
 nats :: [Integer]
 nats = fix (\rec n -> n : rec (n + 1)) 1
 
--- | 1 f
---   Define map.
+{-
+  1 f
+  - Define map.
+-}
 map' :: (a -> b) -> [a] -> [b]
 map' f = fix (\rec -> \case { y:ys -> f y : rec ys ; _ -> [] })
 
--- | 1 g
---   Define zip.
+{-
+  1 g
+  - Define zip.
+-}
 zip' :: [a] -> [b] -> [(a,b)]
 zip' = fix (\rec xs ys -> case (xs,ys) of
                             (a:as,b:bs) -> (a,b) : rec as bs
                             _           -> [])
 
--- | 2 a
---   Write a function which generates a list of all k-sized
---   subsets of the given set. Set is represetented with a
---   list which may contain duplicate elements.
+-- EXERCISE 02 ----------------------------------------------------------------
+
+{-
+  2 a
+  - Write a function which generates a list of all k-sized subsets of the given
+    set. Set is represetented with a list which may contain duplicate elements.
+-}
 subsets :: (Eq a) => Int -> [a] -> [[a]]
 subsets n xs = subsetsUniq n $ nub xs
 
@@ -67,11 +88,12 @@ subsetsUniq n (x:xs) = ys ++ zs
     ys = map (x:) $ subsetsUniq (n-1) xs
     zs = subsetsUniq n xs
 
--- | 2 b
---   Write a function which generates a list of all partitions
---   of the given set. Each partition is represented as a list
---   of lists, the sublist being the disjoint subsets of the
---   given set.
+{-
+  2 b
+  - Write a function which generates a list of all partitions of the given set.
+    Each partition is represented as a list of lists, the sublist being the
+    disjoint subsets of the given set.
+-}
 partitions :: [a] -> [[[a]]]
 partitions [] = error "empty set"
 partitions xs = partitions' xs
@@ -92,9 +114,13 @@ extendPartition :: a -> [[a]] -> [[[a]]]
 extendPartition x []       = [[[x]]]
 extendPartition x (xs:xss) = ((x:xs):xss) : map (xs:) (extendPartition x xss)
 
--- | 3
---   Define a function which – given a list – returns a list of
---   all its permutations. Implement it using explicit recursion.
+-- EXERCISE 03 ----------------------------------------------------------------
+
+{-
+  3
+  - Define a function which – given a list – returns a list of all its
+    permutations. Implement it using explicit recursion.
+-}
 permutations' :: [a] -> [[a]]
 permutations' []     = [[]]
 permutations' (x:xs) = concatMap (extendPermutation x) (permutations' xs)

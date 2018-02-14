@@ -1,12 +1,16 @@
 {-|
 Module      : Homework2Tasks
-Description : Solutions to homework 2 tasks
+Description : Solutions to Homework 2 exercises
 Maintainer  : Dinko Osrecki
 -}
 module Homework2Tasks where
 
--- | 1
---   Given a DNA strand, return its RNA complement.
+-- EXERCISE 01 ----------------------------------------------------------------
+
+{-
+  1
+  - Given a DNA strand, return its RNA complement.
+-}
 toRNA :: String -> String
 toRNA = map toRNAChar
 
@@ -17,31 +21,38 @@ toRNAChar 'T' = 'A'
 toRNAChar 'A' = 'U'
 toRNAChar _   = error "invalid DNA nucletiode"
 
--- | 2
---   Define following functions using recursion.
--- | 2 a
---   Define a multiplication function in terms of addition.
+-- EXERCISE 02 ----------------------------------------------------------------
+
+{-
+  2
+  - Define following functions using recursion.
+
+  2 a
+  - Define a multiplication function in terms of addition.
+-}
 multiply :: Int -> Int -> Int
 multiply a b = sign v
   where
     sign = negIf (signum a /= signum b)
     v = mult (abs a) (abs b)
 
--- for b >= 0
+-- only for b >= 0
 mult :: Int -> Int -> Int
 mult _ 0 = 0
 mult a 1 = a
 mult a b = a + mult a (b - 1)
 
--- | 2 b
---   Define a division function in terms of subtraction.
+{-
+  2 b
+  - Define a division function in terms of subtraction.
+-}
 divide :: Int -> Int -> Int
 divide a b = sign v
   where
     sign = negIf (signum a /= signum b)
     v = div' (abs a) (abs b)
 
--- for a >= 0 && b > 0
+-- only for a >= 0 && b > 0
 div' :: Int -> Int -> Int
 div' _ 0 = error "division by zero"
 div' a b
@@ -52,15 +63,21 @@ negIf :: Bool -> Int -> Int
 negIf True x  = - abs x
 negIf False x = abs x
 
--- | 2 c
---   Define a function to find the greatest common divisor.
+{-
+  2 c
+  - Define a function to find the greatest common divisor.
+-}
 greatestCD :: Int -> Int -> Int
 greatestCD x 0 = x
 greatestCD x y = greatestCD y (x `mod` y)
 
--- | 3
---   Implement a function which converts the number into its
---   English counterpart. It must support numbers up to millions.
+-- EXERCISE 03 ----------------------------------------------------------------
+
+{-
+  3
+  - Implement a function which converts the number into its English
+    counterpart. It must support numbers up to millions.
+-}
 numberToWords :: Int -> String
 numberToWords n = unwords $ reverse $ zipWith (++) words' suffixes
   where
@@ -109,23 +126,31 @@ tens n = xs !! (n - 2)
 suffixes :: [String]
 suffixes = ["", " thousand", " million", " billion", " thrillion"]
 
--- | 4
---   Define your own version of undefined.
---
---   undefined has an unconstrained type 'a' which allows us to
---   use it anywhere in the code. This is because its type gets
---   specialized based on the context in which it is used.
---
---   E.g., undefined specialized to type Int:
--- >  f :: Int -> Int
--- >  f x = x + undefined
---
---   undefined does not have any meaningful value. This means that
---   program breaks if it reaches a step where the value of undefined
---   is needed.
---
---   However, it comes in handy when we need a placeholder in the
---   code. It can be implemented in several ways:
+-- EXERCISE 04 ----------------------------------------------------------------
+
+{-
+  4
+  - Define your own version of undefined.
+-}
+
+{-
+  ANSWER:
+
+  - undefined has an unconstrained type 'a' which allows us to use it anywhere
+    in the code. This is because its type gets specialized based on the context
+    in which it is used.
+
+    E.g., undefined specialized to type Int:
+    >  f :: Int -> Int
+    >  f x = x + undefined
+
+  - undefined does not have any meaningful value. This means that program
+    breaks if it reaches a step where the value of undefined is needed.
+
+    However, it comes in handy when we need a placeholder in the code. It can
+    be implemented in several ways:
+-}
+
 -- as an infinite loop
 undefined' :: a
 undefined' = undefined'
