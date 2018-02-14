@@ -1,6 +1,6 @@
 {-|
 Module      : Lecture3Exercises
-Description : Solutions to in-class exercises for Lecture 3
+Description : Solutions to Lecture 3 exercises
 Maintainer  : Dinko Osrecki
 -}
 module Lecture3Exercises where
@@ -8,8 +8,13 @@ module Lecture3Exercises where
 import           Data.Char
 import           Data.List
 
--- | 1. Without using the ':t' command, determine the types of the
---   following functions:
+-- EXERCISE 01 ----------------------------------------------------------------
+
+{-
+  1
+  - Without using the ':t' command, determine the types of the following
+    functions:
+-}
 foo10 :: String -> [String]
 foo10 w = [x ++ y | x <- lines w, y <- lines w]
 
@@ -40,8 +45,13 @@ foo18 xs = last $ words xs
 foo19 :: Char -> String -> String
 foo19 x z = x : 'y' : z
 
--- | 2. Without using the ':t' command, determine the types of the
---   following functions:
+-- EXERCISE 02 ----------------------------------------------------------------
+
+{-
+  2
+  - Without using the ':t' command, determine the types of the following
+    functions:
+-}
 foo20 :: [a] -> [a]
 foo20 xs = tail xs ++ [head xs]
 
@@ -72,8 +82,13 @@ foo28 cs = [concat [c1,c2] | c1 <- cs, c2 <- cs]
 foo29 :: [a] -> [a]
 foo29 cs = concat [[c1,c2] | c1 <- cs, c2 <- cs]
 
--- | 3. Without using the ':t' command, determine the types of the
---   following functions:
+-- EXERCISE 03 ----------------------------------------------------------------
+
+{-
+  3
+  - Without using the ':t' command, determine the types of the following
+    functions:
+-}
 foo30 :: (Eq a) => a -> [a] -> a
 foo30 x ys = if x == head ys then x else last ys
 
