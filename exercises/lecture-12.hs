@@ -5,7 +5,8 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture12Exercises where
 
-import           Text.Read (readMaybe)
+import           Control.Monad (replicateM, void)
+import           Text.Read     (readMaybe)
 
 -- EXERCISE 01 ----------------------------------------------------------------
 
@@ -41,7 +42,7 @@ readInt = read
 -}
 threeStrings :: IO Int
 threeStrings = do
-  l <- concat <$> sequence [getLine, getLine, getLine]
+  l <- concat <$> replicateM 3 getLine
   putStrLn l
   return $ length l
 
@@ -104,3 +105,53 @@ inputStrings = takeWhile (not . null) <$> getLines
 
 getLines :: IO [String]
 getLines = lines <$> getContents
+
+-- EXERCISE 03 ----------------------------------------------------------------
+{-
+  3.1
+  - Define a function which reads in a number, then reads in that many
+    strings, and finally prints these strings in reverse order.
+-}
+reverseStrings :: IO ()
+reverseStrings = do
+  n <- read <$> getLine
+  xs <- reverse <$> replicateM n getLine
+  mapM_ putStrLn xs
+
+{-
+  3.2
+  - Give recursive definitions for 'sequence' and 'sequence_'.
+-}
+sequence' :: (Monad m) => [m a] -> m [a]
+sequence' []     = return []
+sequence' (m:ms) = (:) <$> m <*> sequence' ms
+
+sequence_' :: (Monad m) => [m a] -> m ()
+sequence_' = void . sequence'
+
+-- using foldr
+sequence'' :: (Monad m) => [m a] -> m [a]
+sequence'' = foldr (\m acc -> (:) <$> m <*> acc) (return [])
+
+{-
+  3.3
+  - Give recursive definitions for 'mapM' and 'mapM_'.
+-}
+mapM' :: (Monad m) => (a -> m b) -> [a] -> m [b]
+mapM' _ []     = return []
+mapM' f (m:ms) = (:) <$> f m <*> mapM' f ms
+
+mapM_' :: (Monad m) => (a -> m b) -> [a] -> m ()
+mapM_' f xs = void $ mapM' f xs
+
+{-
+  3.4
+  - Define a function which prints out the Pythagorean triples whose all
+    sides are <= 100. Every triple should be in a separate line.
+-}
+printTriples :: IO ()
+printTriples = mapM_ print $ triples 100
+
+triples :: Int -> [(Int, Int, Int)]
+triples n =
+  [(x, y, z) | x <- [1..n], y <- [x+1..n], z <- [y+1..n], z*z == x*x + y*y]
