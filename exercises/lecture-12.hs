@@ -6,6 +6,7 @@ Maintainer  : Dinko Osrecki
 module Lecture12Exercises where
 
 import           Control.Monad (replicateM, void)
+import           Data.Set      (Set, notMember)
 import           Text.Read     (readMaybe)
 
 -- EXERCISE 01 ----------------------------------------------------------------
@@ -107,6 +108,7 @@ getLines :: IO [String]
 getLines = lines <$> getContents
 
 -- EXERCISE 03 ----------------------------------------------------------------
+
 {-
   3.1
   - Define a function which reads in a number, then reads in that many
@@ -155,3 +157,38 @@ printTriples = mapM_ print $ triples 100
 triples :: Int -> [(Int, Int, Int)]
 triples n =
   [(x, y, z) | x <- [1..n], y <- [x+1..n], z <- [y+1..n], z*z == x*x + y*y]
+
+-- EXERCISE 04 ----------------------------------------------------------------
+
+{-
+  4.1
+  - Define a function which removes every second line from standard input and
+    prints the result to standard output.
+-}
+filterOdd :: IO ()
+filterOdd = interact filterLines
+  where
+    filterLines = unlines . map snd . filter (odd . fst) . enumerate . lines
+
+enumerate :: [a] -> [(Int, a)]
+enumerate = zip [1..]
+
+{-
+  4.2
+  - Define a function which prefixes each line from standard input with a line
+    number (number + space).
+-}
+numberLines :: IO ()
+numberLines = interact prefixLines
+  where
+    prefixLines = unlines . map prefixLine . enumerate . lines
+    prefixLine (n, l) = show n ++ " " ++ l
+
+{- 4.3
+  - Define a function to remove all words from standard input which are
+    contained in the given set of words.
+-}
+filterWords :: Set String -> IO ()
+filterWords xs = interact removeWords
+  where
+    removeWords = unwords . filter (`notMember` xs) . words
