@@ -5,9 +5,11 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture12Exercises where
 
-import           Control.Monad (replicateM, void)
-import           Data.Set      (Set, notMember)
-import           Text.Read     (readMaybe)
+import           Control.DeepSeq
+import           Control.Monad   (replicateM, void)
+import           Data.Set        (Set, notMember)
+import           System.IO
+import           Text.Read       (readMaybe)
 
 -- EXERCISE 01 ----------------------------------------------------------------
 
@@ -146,6 +148,10 @@ mapM' f (m:ms) = (:) <$> f m <*> mapM' f ms
 mapM_' :: (Monad m) => (a -> m b) -> [a] -> m ()
 mapM_' f xs = void $ mapM' f xs
 
+-- using sequence'
+mapM'' :: (Monad m) => (a -> m b) -> [a] -> m [b]
+mapM'' f = sequence' . map f
+
 {-
   3.4
   - Define a function which prints out the Pythagorean triples whose all
@@ -166,9 +172,8 @@ triples n =
     prints the result to standard output.
 -}
 filterOdd :: IO ()
-filterOdd = interact filterLines
-  where
-    filterLines = unlines . map snd . filter (odd . fst) . enumerate . lines
+filterOdd = interact
+  $ unlines . map snd . filter (odd . fst) . enumerate . lines
 
 enumerate :: [a] -> [(Int, a)]
 enumerate = zip [1..]
@@ -179,16 +184,43 @@ enumerate = zip [1..]
     number (number + space).
 -}
 numberLines :: IO ()
-numberLines = interact prefixLines
+numberLines = interact $ unlines . map prependNumber . enumerate . lines
   where
-    prefixLines = unlines . map prefixLine . enumerate . lines
-    prefixLine (n, l) = show n ++ " " ++ l
+    prependNumber (n, l) = show n ++ " " ++ l
 
 {- 4.3
   - Define a function to remove all words from standard input which are
     contained in the given set of words.
 -}
 filterWords :: Set String -> IO ()
-filterWords xs = interact removeWords
+filterWords ws = interact $ unwords . filter (`notMember` ws) . words
+
+-- EXERCISE 05 ----------------------------------------------------------------
+
+{-
+  5.1
+  - Define a function which counts the number of characters, words, and lines
+    in a file.
+-}
+wc :: FilePath -> IO (Int, Int, Int)
+wc f = withFile f ReadMode $ \h -> do
+  s <- hGetContents h
+  return $!! charsWordsLines s  -- 'deepseq' to read file eagerly
+
+charsWordsLines :: String -> (Int, Int, Int)
+charsWordsLines s = (c, w, l)
   where
-    removeWords = unwords . filter (`notMember` xs) . words
+    c = length s
+    w = length $ words s
+    l = length $ lines s
+
+{-
+  5.2
+  - Define a function which copies the given lines of the first file into the
+    second one.
+-}
+copyLines :: [Int] -> FilePath -> FilePath -> IO ()
+copyLines xs f1 f2 = do
+  s <- readFile f1
+  writeFile f2
+    $ unlines . map snd . filter ((`elem` xs) . fst) . enumerate $ lines s
