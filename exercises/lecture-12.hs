@@ -7,7 +7,7 @@ module Lecture12Exercises where
 
 import           Control.DeepSeq
 import           Control.Monad   (replicateM, void)
-import           Data.Set        (Set, notMember)
+import qualified Data.Set        as Set
 import           System.IO
 import           Text.Read       (readMaybe)
 
@@ -192,8 +192,8 @@ numberLines = interact $ unlines . map prependNumber . enumerate . lines
   - Define a function to remove all words from standard input which are
     contained in the given set of words.
 -}
-filterWords :: Set String -> IO ()
-filterWords ws = interact $ unwords . filter (`notMember` ws) . words
+filterWords :: Set.Set String -> IO ()
+filterWords ws = interact $ unwords . filter (`Set.notMember` ws) . words
 
 -- EXERCISE 05 ----------------------------------------------------------------
 
