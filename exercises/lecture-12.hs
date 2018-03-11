@@ -5,11 +5,19 @@ Maintainer  : Dinko Osrecki
 -}
 module Lecture12Exercises where
 
+import           Control.Arrow         ()
 import           Control.DeepSeq
-import           Control.Monad   (replicateM, void)
-import qualified Data.Set        as Set
+import           Control.Monad
+import           Data.Char
+import           Data.List
+import           Data.Semigroup        ((<>))
+import qualified Data.Set              as Set
+import           Options.Applicative
+import           System.Console.GetOpt
+import           System.Directory
+import           System.FilePath
 import           System.IO
-import           Text.Read       (readMaybe)
+import           Text.Read
 
 -- EXERCISE 01 ----------------------------------------------------------------
 
@@ -224,3 +232,56 @@ copyLines xs f1 f2 = do
   s <- readFile f1
   writeFile f2
     $ unlines . map snd . filter ((`elem` xs) . fst) . enumerate $ lines s
+
+-- EXERCISE 06 ----------------------------------------------------------------
+
+{-
+  6.1
+  - Define a function which computes the number of distinct words in the given
+    file.
+-}
+wordTypes :: FilePath -> IO Int
+wordTypes f = length . nub . words <$> readFile f
+
+{-
+  6.2
+  - Define a function which takes two file names, compares their corresponding
+    lines, and then outputs to standard output all lines in which the files
+    differ. Lines should be printed one below the other, prefixed with "<" for
+    the first and ">" for the second file.
+-}
+diff :: FilePath -> FilePath -> IO ()
+diff f1 f2 = do
+  ds <- diffLines <$> readLines f1 <*> readLines f2
+  mapM_ putStrLn ds
+
+readLines :: FilePath -> IO [String]
+readLines f = lines <$> readFile f
+
+diffLines :: [String] -> [String] -> [String]
+diffLines [] []         = []
+diffLines (x:xs) []     = ('<':x) : diffLines xs []
+diffLines [] (y:ys)     = ('>':y) : diffLines [] ys
+diffLines (x:xs) (y:ys)
+  | x /= y    = ('<':x) : ('>':y) : diffLines xs ys
+  | otherwise = diffLines xs ys
+
+{-
+  6.3
+  - Define a function which removes trailing spaces from all lines in the given
+    file. The function should change the original file.
+-}
+removeSpaces :: FilePath -> IO ()
+removeSpaces f = do
+  s <- unlines . map trimEnd . lines <$> readFile f
+  overwriteFile f s
+
+trimEnd :: String -> String
+trimEnd = dropWhileEnd isSpace
+
+overwriteFile :: FilePath -> String -> IO ()
+overwriteFile f s = do
+  (ft, ht) <- openTempFile (takeDirectory f) (takeFileName f)
+  hPutStr ht s
+  hClose ht
+  renameFile ft f
